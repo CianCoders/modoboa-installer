@@ -60,8 +60,8 @@ class Amavis(base.Installer):
                 packages.append("zoo")
             # debian 10 doesn't have zoo nor ripole
             if distro[0] == "debian" and distro[1] == "10.0":
-                package.remove('zoo')
-                package.remove('ripole')
+                packages.remove('zoo')
+                packages.remove('ripole')
             db_driver = "pg" if self.db_driver == "pgsql" else self.db_driver
             return packages + ["libdbd-{}-perl".format(db_driver)]
         if self.db_driver == "pgsql":
