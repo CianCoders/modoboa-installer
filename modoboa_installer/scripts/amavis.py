@@ -52,10 +52,16 @@ class Amavis(base.Installer):
     def get_packages(self):
         """Additional packages."""
         packages = super(Amavis, self).get_packages()
+
+        distro = platform.linux_distribution()
         if package.backend.FORMAT == "deb":
-            if platform.linux_distribution()[2] != "bionic":
+            if distro[2] != "bionic":
                 # Quick fix
                 packages.append("zoo")
+            # debian 10 doesn't have zoo nor ripole
+            if distro[0] == "debian" and distro[1] == "10.0":
+                package.remove('zoo')
+                package.remove('ripole')
             db_driver = "pg" if self.db_driver == "pgsql" else self.db_driver
             return packages + ["libdbd-{}-perl".format(db_driver)]
         if self.db_driver == "pgsql":
